@@ -9,7 +9,7 @@ double logx(double b,double v);
 int main(){
     int fc = 0;
     field f;
-    uint nodes[4] = {16,16,10,4};
+    uint nodes[4] = {16,16,10,2};
     Network n(nodes,4);
     Trainer tr(n,0.001);
     while(true){
@@ -18,32 +18,27 @@ int main(){
                 n.setInput(i*4+j,logx(2,f[i][j])/logx(2,f.getLargest()));
             }
         n.update();
-        uint j = 0;
-        double k = 0;
-        for(int i = 0;i < 4;i++)
-            if(n.getOutput()[i] > k){
-                k = n.getOutput()[i];
-                j = i;
-            }
-        switch (j) {
-        case 0:
+        
+        if(n.getOutput()[0] < 0.5 && n.getOutput()[1] < 0.5)
             f.moveUp();
-            break;
-        case 1:
-            f.moveLeft();
-            break;
-        case 2:
+        if(n.getOutput()[0] > 0.5 && n.getOutput()[1] > 0.5)
             f.moveDown();
-            break;
-        case 3:
+        if(n.getOutput()[0] < 0.5 && n.getOutput()[1] > 0.5)
+            f.moveLeft();
+        if(n.getOutput()[0] > 0.5 && n.getOutput()[1] < 0.5)
             f.moveRight();
-            break;
-        }
+        
         f.print();
-        cout << "               network: " << tr.currentNet << " fitness: " << f.getScore() << " mutation: " << 0.1/f.getScore();
+        cout << "               network: " << tr.currentNet 
+             << " fitness: " << f.getScore() 
+             << " mutation: " << 0.1/f.getScore()
+             << " output: " 
+             << n.getOutput()[0] << " | "
+             << n.getOutput()[1] 
+             << " fc: " << fc << endl;;
         cout << endl;
         if(f.lost() || fc > 10000){
-            n = tr.update(-f.getScore(),0.1/f.getScore());
+            n = tr.update(-f.getScore(),1/f.getScore());
             f.reset();
             fc = 0;
         }
@@ -54,5 +49,8 @@ int main(){
 }
 
 double logx(double b, double v){
-    return log(v)/log(b);
+    if(v == 0)
+        return 0;
+    else
+        return log(v)/log(b);
 }
