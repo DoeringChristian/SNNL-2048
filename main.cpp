@@ -40,10 +40,10 @@ int main(){
             break;
         }
         f.print();
-        cout << "               network: " << tr.currentNet << " Score: " << f.getScore();
+        cout << "               network: " << tr.currentNet << " fitness: " << f.getScore() << " mutation: " << 0.1/f.getScore();
         cout << endl;
         if(f.lost() || fc > 10000){
-            n = tr.update(-f.getScore(),0.001);
+            n = tr.update(-f.getScore(),0.1/f.getScore());
             f.reset();
             fc = 0;
         }
