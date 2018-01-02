@@ -11,11 +11,12 @@ typedef unsigned int uint;
 class field{
     uint area[4][4];
     bool hasmoved;
+    uint score;
 public:
     field();
     void rotateLeft();
     void slide();
-    int getScore();
+    double getScore();
     void print();
     void addRandom();
     bool lost();

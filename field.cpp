@@ -7,6 +7,7 @@ field::field(){
     hasmoved = true;
     addRandom();
     addRandom();
+    score = 0;
 }
 
 void field::rotateLeft(){
@@ -37,11 +38,14 @@ void field::slide(){
             while(k != 0 && (area[i][k] == 0 || k == j))
                 k--;
             if(area[i][k] == area[i][j] || area[i][k] == 0){
+                if(area[i][k] != 0 && j != k)
+                    score ++;
                 uint b = area[i][j];
                 area[i][j] = 0;
                 area[i][k] += b;
                 if(k != j)
                     hasmoved = true;
+                
             }
             else if(area[i][k] != area[i][j] && area[i][k] != 0){
                 uint b = area[i][j];
@@ -85,12 +89,12 @@ void field::moveLeft(){
 void field::addRandom(){
     srand(time(0));
     if(hasmoved){
-        uint i = -1;
-        uint j = -1;
+        uint i = 0;
+        uint j = 0;
         while(area[i][j] != 0){
+            srand(time(0));
             i = rand() % 4;
             j = rand() % 4;
-            srand(time(0));
         }
         area[i][j] = 2;
     }
@@ -114,12 +118,8 @@ bool field::lost(){
     return l;
 }
 
-int field::getScore(){
-    int s = 0;
-    for(int i = 0;i < 4;i++)
-        for(int j = 0;j < 4;j++)
-            s += area[i][j];
-    return s;
+double field::getScore(){
+    return score;
 }
 
 uint *field::operator [](uint i){
@@ -134,6 +134,7 @@ void field::reset(){
     hasmoved = true;
     addRandom();
     addRandom();
+    score = 0;
 }
 
 int field::getLargest(){

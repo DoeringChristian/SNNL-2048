@@ -4,16 +4,18 @@
 
 using namespace std;
 
+double logx(double b,double v);
+
 int main(){
     int fc = 0;
     field f;
-    uint nodes[4] = {16,10,10,4};
+    uint nodes[4] = {16,16,10,4};
     Network n(nodes,4);
     Trainer tr(n,0.001);
     while(true){
         for(int i = 0;i < 4;i++)
             for(int j = 0;j < 4;j++){
-                n.setInput(i*4+j,f[i][j]/f.getLargest());
+                n.setInput(i*4+j,logx(2,f[i][j])/logx(2,f.getLargest()));
             }
         n.update();
         uint j = 0;
@@ -38,7 +40,7 @@ int main(){
             break;
         }
         f.print();
-        cout << "network: " << tr.currentNet;
+        cout << "               network: " << tr.currentNet << " Score: " << f.getScore();
         cout << endl;
         if(f.lost() || fc > 10000){
             n = tr.update(-f.getScore(),0.001);
@@ -49,4 +51,8 @@ int main(){
         fc++;
     }
     return 0;
+}
+
+double logx(double b, double v){
+    return log(v)/log(b);
 }
