@@ -1,6 +1,7 @@
 #include <iostream>
 #include "field.h"
 #include "network.h"
+#include <fstream>
 
 using namespace std;
 
@@ -12,6 +13,7 @@ int main(){
     Network n(nodes,4);
     Trainer tr(n,0.001);
     n = tr[1];
+    uint iteration = 0;
     while(true){
         uint simcounter = 0;
         uint framecounter = 0;
@@ -40,6 +42,7 @@ int main(){
                      << " output: " 
                      << n.getOutput()[0] << " | "
                      << n.getOutput()[1] 
+                     << " iteration: " << iteration
                      << " network: " << tr.currentNet 
                      << " simulation: " << simcounter 
                      << " frame: " << framecounter
@@ -52,6 +55,12 @@ int main(){
             f.reset();
         }
         n = tr.update(-addedfitness/(simcounter+1),1/(addedfitness/(simcounter+1)));
+        if(tr.currentNet == 0){
+            iteration++;
+            ofstream log;
+            log.open("2048-logging.txt");
+            log << "iteration: " << iteration << " fitness: " << addedfitness/(simcounter+1) << endl;
+        }
     }
     return 0;
 }
