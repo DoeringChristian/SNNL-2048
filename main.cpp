@@ -7,43 +7,51 @@ using namespace std;
 double logx(double b,double v);
 
 int main(){
-    int fc = 0;
     field f;
     uint nodes[4] = {16,16,10,2};
     Network n(nodes,4);
     Trainer tr(n,0.001);
+    n = tr[1];
     while(true){
-        for(int i = 0;i < 4;i++)
-            for(int j = 0;j < 4;j++){
-                n.setInput(i*4+j,logx(2,f[i][j])/logx(2,f.getLargest()));
+        uint simcounter = 0;
+        uint framecounter = 0;
+        double addedfitness = 0;
+        for(simcounter = 0;simcounter < 10;simcounter++){
+            for(framecounter = 0;framecounter < 10000;framecounter++){
+                for(int i = 0;i < 4;i++)
+                    for(int j = 0;j < 4;j++){
+                        n.setInput(i*4+j,logx(2,f[i][j])/logx(2,f.getLargest()));
+                    }
+                n.update();
+                
+                if(n.getOutput()[0] < 0.5 && n.getOutput()[1] < 0.5)
+                    f.moveUp();
+                if(n.getOutput()[0] > 0.5 && n.getOutput()[1] > 0.5)
+                    f.moveDown();
+                if(n.getOutput()[0] < 0.5 && n.getOutput()[1] > 0.5)
+                    f.moveLeft();
+                if(n.getOutput()[0] > 0.5 && n.getOutput()[1] < 0.5)
+                    f.moveRight();
+                
+                f.print();
+                cout << "              "
+                     << " fitness: " << addedfitness/(simcounter+1)
+                     << " mutation: " << 1/(addedfitness/(simcounter+1))
+                     << " output: " 
+                     << n.getOutput()[0] << " | "
+                     << n.getOutput()[1] 
+                     << " network: " << tr.currentNet 
+                     << " simulation: " << simcounter 
+                     << " frame: " << framecounter
+                     << endl;
+                cout << endl;
+                if(f.lost())
+                    break;
             }
-        n.update();
-        
-        if(n.getOutput()[0] < 0.5 && n.getOutput()[1] < 0.5)
-            f.moveUp();
-        if(n.getOutput()[0] > 0.5 && n.getOutput()[1] > 0.5)
-            f.moveDown();
-        if(n.getOutput()[0] < 0.5 && n.getOutput()[1] > 0.5)
-            f.moveLeft();
-        if(n.getOutput()[0] > 0.5 && n.getOutput()[1] < 0.5)
-            f.moveRight();
-        
-        f.print();
-        cout << "               network: " << tr.currentNet 
-             << " fitness: " << f.getScore() 
-             << " mutation: " << 0.1/f.getScore()
-             << " output: " 
-             << n.getOutput()[0] << " | "
-             << n.getOutput()[1] 
-             << " fc: " << fc << endl;;
-        cout << endl;
-        if(f.lost() || fc > 10000){
-            n = tr.update(-f.getScore(),1/f.getScore());
+            addedfitness += f.getScore();
             f.reset();
-            fc = 0;
         }
-        //cin.get();
-        fc++;
+        n = tr.update(-addedfitness/(simcounter+1),1/(addedfitness/(simcounter+1)));
     }
     return 0;
 }
