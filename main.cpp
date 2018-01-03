@@ -58,8 +58,10 @@ int main(){
         if(tr.currentNet == 0){
             iteration++;
             ofstream log;
-            log.open("2048-logging.txt");
+            log.open("2048-logging.txt", ofstream::out | ofstream::app);
             log << "iteration: " << iteration << " fitness: " << addedfitness/(simcounter+1) << endl;
+            log.close();
+            tr.current().SavetoFile("network.snn");
         }
     }
     return 0;
