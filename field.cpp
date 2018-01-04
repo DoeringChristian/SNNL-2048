@@ -8,6 +8,7 @@ field::field(){
     addRandom();
     addRandom();
     score = 0;
+    
 }
 
 void field::rotateLeft(){
@@ -144,6 +145,10 @@ int field::getLargest(){
             if(area[i][j] > largest)
                 largest = area[i][j];
     return largest;
+}
+
+bool field::isLegal(){
+    return hasmoved;
 }
 
 

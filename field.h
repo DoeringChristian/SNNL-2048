@@ -26,6 +26,7 @@ public:
     void moveRight();
     void reset();
     int getLargest();
+    bool isLegal();
     uint *operator [](uint i);
 };
 

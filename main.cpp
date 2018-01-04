@@ -19,6 +19,7 @@ int main(){
         uint framecounter = 0;
         double addedfitness = 0;
         for(simcounter = 0;simcounter < 10;simcounter++){
+            uint illegalmoves = 0;
             for(framecounter = 0;framecounter < 10000;framecounter++){
                 for(int i = 0;i < 4;i++)
                     for(int j = 0;j < 4;j++){
@@ -35,20 +36,29 @@ int main(){
                 if(n.getOutput()[0] > 0.5 && n.getOutput()[1] < 0.5)
                     f.moveRight();
                 
+                if(f.isLegal())
+                    illegalmoves = 0;
+                if(!f.isLegal())
+                    illegalmoves ++;
+                
                 f.print();
                 cout << "              "
                      << " fitness: " << addedfitness/(simcounter+1)
                      << " mutation: " << 1/(addedfitness/(simcounter+1))
                      << " output: " 
                      << n.getOutput()[0] << " | "
-                     << n.getOutput()[1] 
+                     << n.getOutput()[1] << endl
+                     << "              "
+                     << " score: " << f.getScore()
                      << " iteration: " << iteration
                      << " network: " << tr.currentNet 
-                     << " simulation: " << simcounter 
+                     << " simulation: " << simcounter  
                      << " frame: " << framecounter
                      << endl;
                 cout << endl;
                 if(f.lost())
+                    break;
+                if(illegalmoves > 200)
                     break;
             }
             addedfitness += f.getScore();
