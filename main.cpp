@@ -18,9 +18,9 @@ int main(){
         uint simcounter = 0;
         uint framecounter = 0;
         double addedfitness = 0;
-        for(simcounter = 0;simcounter < 10;simcounter++){
+        for(simcounter = 0;simcounter < 100;simcounter++){
             uint illegalmoves = 0;
-            for(framecounter = 0;framecounter < 10000;framecounter++){
+            for(framecounter = 0;framecounter < 1000000;framecounter++){
                 for(int i = 0;i < 4;i++)
                     for(int j = 0;j < 4;j++){
                         n.setInput(i*4+j,logx(2,f[i][j])/logx(2,f.getLargest()));
