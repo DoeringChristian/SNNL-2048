@@ -27,13 +27,13 @@ int main(){
                     }
                 n.update();
                 
-                if(n.getOutput()[0] < 0.5 && n.getOutput()[1] < 0.5)
+                if(n.getOutput()[0] <= 0.5 && n.getOutput()[1] <= 0.5)
                     f.moveUp();
                 if(n.getOutput()[0] > 0.5 && n.getOutput()[1] > 0.5)
                     f.moveDown();
-                if(n.getOutput()[0] < 0.5 && n.getOutput()[1] > 0.5)
+                if(n.getOutput()[0] <= 0.5 && n.getOutput()[1] > 0.5)
                     f.moveLeft();
-                if(n.getOutput()[0] > 0.5 && n.getOutput()[1] < 0.5)
+                if(n.getOutput()[0] > 0.5 && n.getOutput()[1] <= 0.5)
                     f.moveRight();
                 
                 if(f.isLegal())
