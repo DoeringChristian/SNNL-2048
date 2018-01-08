@@ -9,7 +9,7 @@ double logx(double b,double v);
 
 int main(){
     field f;
-    uint nodes[4] = {16,16,10,2};
+    uint nodes[4] = {16,16,10,4};
     Network n(nodes,4);
     Trainer tr(n,0.001);
     n = tr[1];
@@ -27,14 +27,24 @@ int main(){
                     }
                 n.update();
                 
-                if(n.getOutput()[0] <= 0.5 && n.getOutput()[1] <= 0.5)
-                    f.moveUp();
-                if(n.getOutput()[0] > 0.5 && n.getOutput()[1] > 0.5)
-                    f.moveDown();
-                if(n.getOutput()[0] <= 0.5 && n.getOutput()[1] > 0.5)
-                    f.moveLeft();
-                if(n.getOutput()[0] > 0.5 && n.getOutput()[1] <= 0.5)
-                    f.moveRight();
+                int j = 0;
+                for(int i = 0;i < 4;i++)
+                	if(n.getOutput()[i] > n.getOutput()[j])
+                		j = i;
+                switch(j){
+                	case 0:
+                		f.moveUp();
+                		break;
+                	case 1:
+                		f.moveDown();
+                		break;
+                	case 2:
+                		f.moveLeft();
+                		break;
+                	case 3:
+                		f.moveRight();
+                		break;
+                }
                 
                 if(f.isLegal())
                     illegalmoves = 0;
@@ -47,7 +57,9 @@ int main(){
                      << " mutation: " << 1/(addedfitness/(simcounter+1))
                      << " output: " 
                      << n.getOutput()[0] << " | "
-                     << n.getOutput()[1] << endl
+                     << n.getOutput()[1] << " | "
+                     << n.getOutput()[2] << " | "
+                     << n.getOutput()[3] << endl
                      << "              "
                      << " score: " << f.getScore()
                      << " iteration: " << iteration
