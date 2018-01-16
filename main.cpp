@@ -9,8 +9,8 @@ double logx(double b,double v);
 
 int main(){
     field f;
-    uint nodes[5] = {16,256,128,16,4};
-    Network n(nodes,5);
+    uint nodes[4] = {16,16,10,4};
+    Network n(nodes,4);
     Trainer tr(n,0.001);
     n = tr[1];
     uint iteration = 0;
