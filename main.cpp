@@ -10,7 +10,7 @@ double logx(double b,double v);
 int main(){
     field f;
     uint nodes[4] = {16,16,10,4};
-    Network n(nodes,4);
+    Network n(nodes,4,false);
     Trainer tr(n,0.001);
     n = tr[1];
     uint iteration = 0;
@@ -76,7 +76,7 @@ int main(){
             addedfitness += f.getScore();
             f.reset();
         }
-        n = tr.update(-addedfitness/(simcounter+1),1/(addedfitness/(simcounter+1)));
+        n = tr.update(-addedfitness/(simcounter+1),0.1,0.1);
         if(tr.currentNet == 0){
             iteration++;
             ofstream log;
